@@ -11,7 +11,6 @@ public class WrongWayVolatile {
         Thread thread = new Thread(producer);
         thread.start();
         Thread.sleep(1000);
-        Thread.currentThread().isInterrupted()
 
         Consumer consumer = new Consumer();
         while (consumer.needMore()){
