@@ -27,3 +27,8 @@
         - `wait`不指定时间时，默认永久等待；`sleep`则必须指定参数
         - `wait`方法在对象中, `sleep`方法在Thread中
         - `wait`方法释放锁，`sleep`方法不释放锁
+        
+5. `join`方法原理:
+    - 本质是对wait方法的调用，调的是子线程的wait方法
+    - 每一个Thread方法在run方法结束后，都会对该Thread对象执行
+    notify()操作
