@@ -1,11 +1,15 @@
 package com.company.threadcoreknowledge.chapter10deadlock;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadInfo;
+import java.lang.management.ThreadMXBean;
+import java.util.Arrays;
+
 public class TransferMoney implements Runnable{
 
     private int flag;
     private static Account a = new Account(500);
     private static Account b = new Account(500);
-
 
     public static void main(String[] args) throws InterruptedException {
         TransferMoney m1 = new TransferMoney();
@@ -19,8 +23,19 @@ public class TransferMoney implements Runnable{
         thread1.start();
         thread2.start();
 
-        thread1.join();
-        thread2.join();
+//        thread1.join();
+//        thread2.join();
+
+        Thread.sleep(1000);
+        //使用ThreadMXBean发现问题并解决问题
+        ThreadMXBean bean = ManagementFactory.getThreadMXBean();
+        long[] deadlockedThreads = bean.findDeadlockedThreads();
+        if(deadlockedThreads != null && deadlockedThreads.length > 0) {
+            for (int i = 0; i < deadlockedThreads.length; i++) {
+                ThreadInfo threadInfo = bean.getThreadInfo(deadlockedThreads[i]);
+                System.out.println("发现死锁: " + threadInfo.getThreadName());
+            }
+        }
     }
 
     @Override
@@ -34,22 +49,23 @@ public class TransferMoney implements Runnable{
     }
 
     public static void transfer(Account a, Account b, int money) {
-        synchronized (a) {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            if(a.balance < money) {
-                System.out.println("账户余额不足");
-                return;
-            }
-            synchronized (b) {
-                System.out.println("成功转账" + money + "元");
-                a.balance -= money;
-                b.balance += money;
-            }
-        }
+//        synchronized (a) {
+//            try {
+//                Thread.sleep(50);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            if(a.balance < money) {
+//                System.out.println("账户余额不足");
+//                return;
+//            }
+//            synchronized (b) {
+//                System.out.println("成功转账" + money + "元");
+//                a.balance -= money;
+//                b.balance += money;
+//            }
+//        }
+        SolveMustLock.transfer(a, b, money);
     }
 
     static class Account {

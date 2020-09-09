@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class ATMSimulate{
 
-    private static final int NUM_ACCOUNT = 50;
+    private static final int NUM_ACCOUNT = 500;
     private static final int NUM_MONEY = 1000;
     private static final int NUM_THREADS = 20;
     private static final int TRANSFER_TIMES = 1000000;
